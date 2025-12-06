@@ -8,53 +8,8 @@ import { useState, useEffect } from "react";
 import saveFile from "../components/Save";
 
 export function Record() {
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
-    null
-  );
-  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
-  const [isRecording, setIsRecording] = useState(false);
-
-  useEffect(() => {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ audio: true })
-        .then((stream) => {
-          const recorder = new MediaRecorder(stream);
-
-          recorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-              console.log("Received audio chunk of size:", event.data.size);
-              setAudioChunks((prev) => [...prev, event.data]);
-            }
-          };
-
-          recorder.onstop = () => {
-            // Create blob from the current audioChunks state
-            setAudioChunks((currentChunks) => {
-              const audioBlob = new Blob(currentChunks, { type: "audio/wav" });
-              saveFile({ blob: audioBlob });
-              return []; // Clear chunks after saving
-            });
-          };
-
-          setMediaRecorder(recorder);
-        })
-        .catch((error) => {
-          console.error("Error accessing microphone:", error);
-        });
-    }
-  }, []);
-
   const handleRecordClick = () => {
-    if (!mediaRecorder) return;
-
-    if (!isRecording) {
-      setAudioChunks([]); // Clear any previous chunks
-      mediaRecorder.start(100); // Start recording and get data every 100ms
-    } else {
-      mediaRecorder.stop(); // The onstop handler will create and save the blob
-    }
-    setIsRecording(!isRecording);
+    return;
   };
 
   return (
