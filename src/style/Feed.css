@@ -1,0 +1,24 @@
+.btn-primary {
+  background-color: #fce38a;
+  border-color: #fce38a;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #f9d976;
+  border-color: #f9d976;
+  color: white;
+}
+
+.btn-primary:active:focus {
+  background-color: #fbbf59;
+  border-color: #fbbf59;
+  color: white;
+}
+
+.logoContainer {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
