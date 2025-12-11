@@ -14,12 +14,12 @@ export function Record() {
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   // State to track recording status: "inactive" or "recording"
   const [recordingStatus, setRecordingStatus] = useState<string>("inactive");
-  // State to hold the audio stream from the user's microphone
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  // State to store audio data chunks as they're recorded
-  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
   // State to store the playable audio URL after recording is complete
   const [audio, setAudio] = useState<string | null>(null);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const timerIntervalRef = useRef<number | null>(null);
+  const startTime = useRef<number>(Date.now());
+  const stopRecordingTimeoutRef = useRef<number | null>(null);
 
   const startRecording = async () => {
     console.log("startRecording called");
@@ -32,29 +32,60 @@ export function Record() {
           audio: true,
           video: false,
         });
-        // Store the audio stream so it can be used for recording
-        setStream(streamData);
 
         // Mark that recording is now in progress
         setRecordingStatus("recording");
         // Create a new MediaRecorder instance with the microphone stream
-        if (stream == null) return;
-
-        const media = new MediaRecorder(stream, { mimeType: mimeType });
+        // Use streamData directly (setStream is async)
+        const media = new MediaRecorder(streamData, { mimeType: mimeType });
         // Store the MediaRecorder in a ref so we can access it in other functions
         mediaRecorder.current = media;
-        // Start recording audio
-        mediaRecorder.current.start();
         // Initialize an array to temporarily store audio chunks during recording
         let localAudioChunks: Blob[] = [];
-        // When audio data is available, capture it and add to the array
+        // Attach handlers BEFORE start() to ensure no data is missed
         mediaRecorder.current.ondataavailable = (event) => {
           if (typeof event.data === "undefined") return;
           if (event.data.size === 0) return;
           localAudioChunks.push(event.data);
         };
-        // Save the chunks to component state
-        setAudioChunks(localAudioChunks);
+        // Attach onstop handler BEFORE start() to capture final data
+        mediaRecorder.current.onstop = () => {
+          // Creates a blob file from the audio chunks data
+          const audioBlob = new Blob(localAudioChunks, { type: mimeType });
+          // Creates a playable URL from the blob file
+          const audioUrl = URL.createObjectURL(audioBlob);
+          // Store the URL so we can display/download the recording
+          setAudio(audioUrl);
+
+          // Clear the interval
+          if (timerIntervalRef.current) {
+            clearInterval(timerIntervalRef.current);
+            timerIntervalRef.current = null;
+          }
+
+          setElapsedTime(Math.floor((Date.now() - startTime.current) / 1000));
+        };
+        // Start recording audio
+        mediaRecorder.current.start();
+
+        // Reset timer and startTime HERE (right when recording actually starts)
+        startTime.current = Date.now();
+        setElapsedTime(0);
+
+        if (timerIntervalRef.current) {
+          clearInterval(timerIntervalRef.current);
+          timerIntervalRef.current = null;
+        }
+
+        // Start interval that increments by 1 each second
+        timerIntervalRef.current = window.setInterval(() => {
+          setElapsedTime(Math.floor((Date.now() - startTime.current) / 1000));
+        }, 200);
+
+        stopRecordingTimeoutRef.current = setTimeout(
+          stopRecording,
+          7 * 60 * 1000
+        ); // Auto-stop after 7 minutes
       } catch (err) {
         // User denied permission or error occurred
         alert((err as Error).message);
@@ -70,19 +101,19 @@ export function Record() {
     // Mark recording as inactive so UI buttons change
     setRecordingStatus("inactive");
     // Stop the recording instance
-    if (mediaRecorder.current != null) {
+    if (
+      mediaRecorder.current != null &&
+      mediaRecorder.current.state !== "inactive"
+    ) {
+      // Force emission of buffered data BEFORE stopping (critical for timeout)
+      mediaRecorder.current.requestData();
+      // Now stop (onstop will fire after all data is emitted)
       mediaRecorder.current.stop();
-      // Set up handler for when recording has stopped
-      mediaRecorder.current.onstop = () => {
-        // Creates a blob file from the audio chunks data
-        const audioBlob = new Blob(audioChunks, { type: mimeType });
-        // Creates a playable URL from the blob file
-        const audioUrl = URL.createObjectURL(audioBlob);
-        // Store the URL so we can display/download the recording
-        setAudio(audioUrl);
-        // Clear the chunks array since they're now stored as a blob
-        setAudioChunks([]);
-      };
+    }
+
+    if (stopRecordingTimeoutRef.current) {
+      clearTimeout(stopRecordingTimeoutRef.current);
+      stopRecordingTimeoutRef.current = null;
     }
   };
 
@@ -101,22 +132,22 @@ export function Record() {
         </Link>
       </div>
       <div className="recordingContainer">
+        <div className="recording-timer">
+          {Math.floor(elapsedTime / 60)}:
+          {String(elapsedTime % 60).padStart(2, "0")}
+        </div>
         {audio
           ? (() => {
               console.log("Rendering: audio player");
               return (
                 <div>
-                  {" "}
-                  <audio src={audio} controls></audio>
-                  <a download href={audio}>
-                    <p>Download Recording</p>
-                  </a>
+                  <audio src={audio} controls>
+                    Your browser does not support the audio element.
+                  </audio>
                 </div>
               );
             })()
           : null}
-
-        {/* Show "Start Recording" button if not currently recording */}
         {recordingStatus === "inactive" ? (
           <>
             {console.log("Rendering: Start Recording button")}
@@ -135,7 +166,6 @@ export function Record() {
             </Button>
           </>
         ) : null}
-        {/* Show "Stop Recording" button while recording is in progress */}
         {recordingStatus === "recording" ? (
           <>
             {console.log("Rendering: Stop Recording button")}
