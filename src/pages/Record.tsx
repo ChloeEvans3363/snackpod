@@ -5,6 +5,11 @@ import Button from "../components/Button";
 import "../style/Record.css";
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
+// import { v4 as uuid } from "uuid";
+// import { generateClient } from "aws-amplify/api";
+// import { graphqlOperation } from "aws-amplify/data"; // replaces old graphqlOperation
+// import { uploadData, getUrl, remove } from "aws-amplify/storage"; // Storage functions
+// import { createPod } from "../graphql/mutations.js";
 
 export function Record() {
   // Audio format for recording
@@ -19,11 +24,11 @@ export function Record() {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const timerIntervalRef = useRef<number | null>(null);
   const startTime = useRef<number>(Date.now());
-  const stopRecordingTimeoutRef = useRef<number | null>(null);
+  const stopRecordingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
   const startRecording = async () => {
-    console.log("startRecording called");
-
     // Check if the browser supports MediaRecorder API
     if ("MediaRecorder" in window) {
       try {
@@ -97,7 +102,6 @@ export function Record() {
   };
 
   const stopRecording = () => {
-    console.log("stopRecording called");
     // Mark recording as inactive so UI buttons change
     setRecordingStatus("inactive");
     // Stop the recording instance
@@ -115,6 +119,24 @@ export function Record() {
       clearTimeout(stopRecordingTimeoutRef.current);
       stopRecordingTimeoutRef.current = null;
     }
+  };
+  const [podData, setPodData] = useState({
+    title: "",
+    genre: "",
+  });
+  const onUpload = async () => {
+    console.log("Uploading pod:", podData, audio);
+    // const { key } = await Storage.put(`${uuid()}.mp3`, audio, {
+    //   contentType: "audio/mp3",
+    // });
+
+    // const createPodInput = {
+    //   id: uuid(),
+    //   title: podData.title,
+    //   genre: podData.genre,
+    //   filePath: key,
+    // };
+    // await API.graphql(graphqlOperation(createPod, { input: createPodInput }));
   };
 
   return (
@@ -138,7 +160,6 @@ export function Record() {
         </div>
         {audio
           ? (() => {
-              console.log("Rendering: audio player");
               return (
                 <div>
                   <audio src={audio} controls>
@@ -150,7 +171,6 @@ export function Record() {
           : null}
         {recordingStatus === "inactive" ? (
           <>
-            {console.log("Rendering: Start Recording button")}
             <Button
               color="outline-primary"
               buttonName="recordButton"
@@ -168,7 +188,6 @@ export function Record() {
         ) : null}
         {recordingStatus === "recording" ? (
           <>
-            {console.log("Rendering: Stop Recording button")}
             <Button
               color="outline-primary"
               buttonName="recordButton"
@@ -186,10 +205,26 @@ export function Record() {
         ) : null}
 
         <div className="inputContainer">
-          <TextInput type="text">Pod title</TextInput>
-          <TextInput type="text">Category (e.g. Comedy)</TextInput>
+          <TextInput
+            type="text"
+            value={podData.title}
+            onChange={(e) => setPodData({ ...podData, title: e.target.value })}
+          >
+            Pod title
+          </TextInput>
+          <TextInput
+            type="text"
+            value={podData.genre}
+            onChange={(e) => setPodData({ ...podData, genre: e.target.value })}
+          >
+            Category (e.g. Comedy)
+          </TextInput>
           <Link to="/Feed">
-            <Button color="primary" buttonName="uploadButton">
+            <Button
+              color="primary"
+              buttonName="uploadButton"
+              onClick={onUpload}
+            >
               Upload Pod
             </Button>
           </Link>
