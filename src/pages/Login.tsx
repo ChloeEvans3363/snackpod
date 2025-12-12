@@ -15,8 +15,12 @@ export function Login() {
       </div>
 
       <div className="inputContainer">
-        <TextInput type="text">Email</TextInput>
-        <TextInput type="password">Password</TextInput>
+        <TextInput type="text" value="email">
+          Email
+        </TextInput>
+        <TextInput type="password" value="password">
+          Password
+        </TextInput>
       </div>
 
       <div className="buttonContainer">
