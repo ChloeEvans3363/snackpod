@@ -3,7 +3,7 @@ import { defineStorage } from '@aws-amplify/backend';
 export const storage = defineStorage({
   name: "amplify-gen2-files",
   access: (allow) => ({
-    "podcast-submissions/*": [allow.authenticated.to(["read", "write", "delete"])],
+    "podcast-submissions/*": [allow.guest.to(["read", "write", "delete"])],
   }),
 });
 
