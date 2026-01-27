@@ -42,7 +42,7 @@ function App({ signOut, user }: WithAuthenticatorProps) {
 
       // Upload the Storage file:
       const result = await uploadData({
-        path: `images/${song.id}-${file.name}`,
+        path: `podcast-submissions/${song.id}-${file.name}`,
         data: file,
         options: {
           contentType: "image/png", // contentType is optional
@@ -82,7 +82,7 @@ function App({ signOut, user }: WithAuthenticatorProps) {
     try {
       // Upload the Storage file:
       const result = await uploadData({
-        path: `images/${currentSong.id}-${file.name}`,
+        path: `podcast-submissions/${currentSong.id}-${file.name}`,
         data: file,
         options: {
           contentType: "image/png", // contentType is optional
