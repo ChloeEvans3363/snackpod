@@ -20,6 +20,16 @@ Amplify.configure(outputs);
 
 const components = {
   SignIn: {
+    Header() {
+      return (
+        <div className="loginLogo">
+          <Link to="/">
+            <img src={logo} className="logo snackpod" alt="Snackpod logo" />
+          </Link>
+          <h2>snackable audio, seriously addictive</h2>
+        </div>
+      );
+    },
     Footer() {
       const { toForgotPassword, toSignUp } = useAuthenticator();
       return (
@@ -41,6 +51,16 @@ const components = {
     },
   },
   SignUp: {
+    Header() {
+      return (
+        <div className="loginLogo">
+          <Link to="/">
+            <img src={logo} className="logo snackpod" alt="Snackpod logo" />
+          </Link>
+          <h2>snackable audio, seriously addictive</h2>
+        </div>
+      );
+    },
     Footer() {
       const { toSignIn } = useAuthenticator();
       return (
@@ -121,12 +141,6 @@ const theme: Theme = {
 export function Login() {
   return (
     <>
-      <div className="loginLogo">
-        <Link to="/">
-          <img src={logo} className="logo snackpod" alt="Snackpod logo" />
-        </Link>
-        <h2>snackable audio, seriously addictive</h2>
-      </div>
       <ThemeProvider theme={theme}>
         <Authenticator
           formFields={formFields}
