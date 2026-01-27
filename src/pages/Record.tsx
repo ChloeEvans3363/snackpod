@@ -3,7 +3,7 @@ import fontLogo from "../assets/brandmark_main.svg";
 import TextInput from "../components/Form";
 import Button from "../components/Button";
 import "../style/Record.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { uploadData } from "aws-amplify/storage";
 
