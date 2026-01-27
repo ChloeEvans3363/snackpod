@@ -3,7 +3,7 @@ import fontLogo from "../assets/brandmark_main.svg";
 import TextInput from "../components/Form";
 import Button from "../components/Button";
 import "../style/Record.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 // import { v4 as uuid } from "uuid";
 // import { generateClient } from "aws-amplify/api";
@@ -12,6 +12,7 @@ import { useRef, useState } from "react";
 // import { createPod } from "../graphql/mutations.js";
 
 export function Record() {
+  const navigate = useNavigate();
   // Audio format for recording
   const mimeType = "audio/webm";
 
@@ -25,7 +26,7 @@ export function Record() {
   const timerIntervalRef = useRef<number | null>(null);
   const startTime = useRef<number>(Date.now());
   const stopRecordingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null
+    null,
   );
 
   const startRecording = async () => {
@@ -89,7 +90,7 @@ export function Record() {
 
         stopRecordingTimeoutRef.current = setTimeout(
           stopRecording,
-          7 * 60 * 1000
+          7 * 60 * 1000,
         ); // Auto-stop after 7 minutes
       } catch (err) {
         // User denied permission or error occurred
@@ -147,11 +148,13 @@ export function Record() {
         <p>Tap mic to start & stop recording</p>
       </div>
       <div className="cancelDiv">
-        <Link to="/Feed">
-          <Button color="outline-primary" buttonName="cancelButton">
-            Cancel
-          </Button>
-        </Link>
+        <Button
+          color="outline-primary"
+          buttonName="cancelButton"
+          onClick={() => navigate(-1)}
+        >
+          Cancel
+        </Button>
       </div>
       <div className="recordingContainer">
         <div className="recording-timer">
