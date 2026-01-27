@@ -5,11 +5,7 @@ import Button from "../components/Button";
 import "../style/Record.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-// import { v4 as uuid } from "uuid";
-// import { generateClient } from "aws-amplify/api";
-// import { graphqlOperation } from "aws-amplify/data"; // replaces old graphqlOperation
-// import { uploadData, getUrl, remove } from "aws-amplify/storage"; // Storage functions
-// import { createPod } from "../graphql/mutations.js";
+import { uploadData } from "aws-amplify/storage";
 
 export function Record() {
   const navigate = useNavigate();
@@ -127,17 +123,31 @@ export function Record() {
   });
   const onUpload = async () => {
     console.log("Uploading pod:", podData, audio);
-    // const { key } = await Storage.put(`${uuid()}.mp3`, audio, {
-    //   contentType: "audio/mp3",
-    // });
+    if (!audio) {
+      alert("No recording found");
+      return;
+    }
 
-    // const createPodInput = {
-    //   id: uuid(),
-    //   title: podData.title,
-    //   genre: podData.genre,
-    //   filePath: key,
-    // };
-    // await API.graphql(graphqlOperation(createPod, { input: createPodInput }));
+    try {
+      // Convert the audio blob to a File object
+      const audioBlob = await fetch(audio).then((r) => r.blob());
+      const audioFile = new File(
+        [audioBlob],
+        `${podData.title || "podcast"}.webm`,
+        { type: "audio/webm" },
+      );
+
+      // Upload the file
+      const result = await uploadData({
+        path: `podcast-submissions/${Date.now()}-${audioFile.name}`,
+        data: audioFile,
+      });
+
+      console.log("Upload successful:", result);
+      navigate(-1);
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
   };
 
   return (
@@ -222,15 +232,9 @@ export function Record() {
           >
             Category (e.g. Comedy)
           </TextInput>
-          <Link to="/Feed">
-            <Button
-              color="primary"
-              buttonName="uploadButton"
-              onClick={onUpload}
-            >
-              Upload Pod
-            </Button>
-          </Link>
+          <Button color="primary" buttonName="uploadButton" onClick={onUpload}>
+            Upload Pod
+          </Button>
         </div>
       </div>
     </>

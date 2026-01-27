@@ -1,28 +1,19 @@
-import * as React from "react";
-import { uploadData } from "aws-amplify/storage";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Feed from "./pages/Feed";
+import Record from "./pages/Record";
+import Saved from "./pages/Saved";
 
 function App() {
-  const [file, setFile] = React.useState<File | undefined>();
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(event.target.files?.[0]);
-  };
-
-  const handleClick = () => {
-    if (!file) {
-      return;
-    }
-    uploadData({
-      path: `picture-submissions/${file.name}`,
-      data: file,
-    });
-  };
-
   return (
-    <div>
-      <input type="file" onChange={handleChange} />
-      <button onClick={handleClick}>Upload</button>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login></Login>} />
+        <Route path="/feed" element={<Feed></Feed>} />
+        <Route path="/record" element={<Record></Record>} />
+        <Route path="/saved" element={<Saved></Saved>} />
+      </Routes>
+    </Router>
   );
 }
 
