@@ -8,7 +8,7 @@ import { useRef, useState } from "react";
 import { uploadData } from "aws-amplify/storage";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/api";
-//Pushing code to test sandbox reset
+
 // Generating the client
 const client = generateClient<Schema>({
   authMode: "userPool",
