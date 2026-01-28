@@ -8,19 +8,13 @@ import { useRef, useState } from "react";
 import { uploadData } from "aws-amplify/storage";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/api";
-import {
-  type WithAuthenticatorProps,
-  withAuthenticator,
-} from "@aws-amplify/ui-react";
 
 // Generating the client
 const client = generateClient<Schema>({
   authMode: "userPool",
 });
 
-type Podcast = Schema["Podcast"]["type"];
-
-export function Record({ user }: WithAuthenticatorProps) {
+export function Record() {
   const navigate = useNavigate();
   // Audio format for recording
   const mimeType = "audio/webm";
