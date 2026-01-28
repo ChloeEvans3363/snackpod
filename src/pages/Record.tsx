@@ -6,8 +6,21 @@ import "../style/Record.css";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { uploadData } from "aws-amplify/storage";
+import type { Schema } from "../../amplify/data/resource";
+import { generateClient } from "aws-amplify/api";
+import {
+  type WithAuthenticatorProps,
+  withAuthenticator,
+} from "@aws-amplify/ui-react";
 
-export function Record() {
+// Generating the client
+const client = generateClient<Schema>({
+  authMode: "userPool",
+});
+
+type Podcast = Schema["Podcast"]["type"];
+
+export function Record({ user }: WithAuthenticatorProps) {
   const navigate = useNavigate();
   // Audio format for recording
   const mimeType = "audio/webm";
@@ -121,15 +134,25 @@ export function Record() {
     title: "",
     genre: "",
   });
+
   const onUpload = async () => {
     console.log("Uploading pod:", podData, audio);
+
     if (!audio) {
       alert("No recording found");
       return;
     }
 
+    const response = await client.models.Podcast.create({
+      name: podData.title,
+      genre: podData.genre,
+    });
+
+    const podcast = response.data;
+    if (!podcast) return;
+
     try {
-      // Convert the audio blob to a File object
+      //Convert the audio blob to a File object
       const audioBlob = await fetch(audio).then((r) => r.blob());
       const audioFile = new File(
         [audioBlob],
@@ -137,14 +160,19 @@ export function Record() {
         { type: "audio/webm" },
       );
 
-      // Upload the file
+      // Upload the Storage file:
       const result = await uploadData({
-        path: `podcast-submissions/${Date.now()}-${audioFile.name}`,
+        path: `podcast-submissions/${podcast.id}-${audioFile.name}`,
         data: audioFile,
-      });
+      }).result;
 
       console.log("Upload successful:", result);
       navigate(-1);
+      // const updateResponse = await client.models.Podcast.update({
+      //   id: podcast.id,
+      // });
+
+      // const updatedSong = updateResponse.data;
     } catch (err) {
       console.error("Upload failed:", err);
     }

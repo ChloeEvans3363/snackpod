@@ -89,26 +89,35 @@ const formFields = {
     },
   },
   signUp: {
+    preferred_username: {
+      placeholder: "Username",
+      isRequired: true,
+      label: "",
+      order: 1,
+    },
     email: {
       placeholder: "Email",
       isRequired: true,
       label: "",
+      order: 2,
     },
     password: {
       placeholder: "Password",
       isRequired: true,
       label: "",
+      order: 3,
     },
     confirm_password: {
       placeholder: "Confirm Password",
       isRequired: true,
       label: "",
+      order: 4,
     },
   },
 };
 
 const theme: Theme = {
-  name: "Auth Example Theme",
+  name: "SignIn Theme",
   tokens: {
     components: {
       authenticator: {
