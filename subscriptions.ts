@@ -13,6 +13,7 @@ export const onCreatePodcast = /* GraphQL */ `subscription OnCreatePodcast(
   $owner: String
 ) {
   onCreatePodcast(filter: $filter, owner: $owner) {
+    audioPath
     createdAt
     genre
     id
@@ -31,6 +32,7 @@ export const onDeletePodcast = /* GraphQL */ `subscription OnDeletePodcast(
   $owner: String
 ) {
   onDeletePodcast(filter: $filter, owner: $owner) {
+    audioPath
     createdAt
     genre
     id
@@ -49,6 +51,7 @@ export const onUpdatePodcast = /* GraphQL */ `subscription OnUpdatePodcast(
   $owner: String
 ) {
   onUpdatePodcast(filter: $filter, owner: $owner) {
+    audioPath
     createdAt
     genre
     id

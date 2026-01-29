@@ -10,6 +10,7 @@ type GeneratedQuery<InputType, OutputType> = string & {
 
 export const getPodcast = /* GraphQL */ `query GetPodcast($id: ID!) {
   getPodcast(id: $id) {
+    audioPath
     createdAt
     genre
     id
@@ -30,6 +31,7 @@ export const listPodcasts = /* GraphQL */ `query ListPodcasts(
 ) {
   listPodcasts(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      audioPath
       createdAt
       genre
       id

@@ -137,14 +137,6 @@ export function Record() {
       return;
     }
 
-    const response = await client.models.Podcast.create({
-      name: podData.title,
-      genre: podData.genre,
-    });
-
-    const podcast = response.data;
-    if (!podcast) return;
-
     try {
       //Convert the audio blob to a File object
       const audioBlob = await fetch(audio).then((r) => r.blob());
@@ -156,17 +148,29 @@ export function Record() {
 
       // Upload the Storage file:
       const result = await uploadData({
-        path: `podcast-submissions/${podcast.id}-${audioFile.name}`,
+        path: `podcast-submissions/${podData.title}-${audioFile.name}`,
         data: audioFile,
       }).result;
+      console.log(podData.title + " " + podData.genre + " " + result.path);
+
+      const response = await client.models.Podcast.create({
+        name: podData.title,
+        genre: podData.genre,
+        audioPath: result.path,
+      });
+      console.log("Podcast create response:", response);
+      if (response.errors) {
+        console.error("Podcast create errors:", response.errors);
+      }
+
+      const podcast = response.data;
+      if (!podcast) {
+        console.error("Failed to create podcast record");
+        return;
+      }
 
       console.log("Upload successful:", result);
       navigate(-1);
-      // const updateResponse = await client.models.Podcast.update({
-      //   id: podcast.id,
-      // });
-
-      // const updatedSong = updateResponse.data;
     } catch (err) {
       console.error("Upload failed:", err);
     }

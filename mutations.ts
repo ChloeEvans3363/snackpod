@@ -13,6 +13,7 @@ export const createPodcast = /* GraphQL */ `mutation CreatePodcast(
   $input: CreatePodcastInput!
 ) {
   createPodcast(condition: $condition, input: $input) {
+    audioPath
     createdAt
     genre
     id
@@ -31,6 +32,7 @@ export const deletePodcast = /* GraphQL */ `mutation DeletePodcast(
   $input: DeletePodcastInput!
 ) {
   deletePodcast(condition: $condition, input: $input) {
+    audioPath
     createdAt
     genre
     id
@@ -49,6 +51,7 @@ export const updatePodcast = /* GraphQL */ `mutation UpdatePodcast(
   $input: UpdatePodcastInput!
 ) {
   updatePodcast(condition: $condition, input: $input) {
+    audioPath
     createdAt
     genre
     id

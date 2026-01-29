@@ -4,6 +4,7 @@
 
 export type Podcast = {
   __typename: "Podcast",
+  audioPath: string,
   createdAt: string,
   genre: string,
   id: string,
@@ -14,6 +15,7 @@ export type Podcast = {
 
 export type ModelPodcastFilterInput = {
   and?: Array< ModelPodcastFilterInput | null > | null,
+  audioPath?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   genre?: ModelStringInput | null,
   id?: ModelIDInput | null,
@@ -87,6 +89,7 @@ export type ModelPodcastConnection = {
 
 export type ModelPodcastConditionInput = {
   and?: Array< ModelPodcastConditionInput | null > | null,
+  audioPath?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   genre?: ModelStringInput | null,
   name?: ModelStringInput | null,
@@ -97,6 +100,7 @@ export type ModelPodcastConditionInput = {
 };
 
 export type CreatePodcastInput = {
+  audioPath: string,
   genre: string,
   id?: string | null,
   name: string,
@@ -107,6 +111,7 @@ export type DeletePodcastInput = {
 };
 
 export type UpdatePodcastInput = {
+  audioPath?: string | null,
   genre?: string | null,
   id: string,
   name?: string | null,
@@ -114,6 +119,7 @@ export type UpdatePodcastInput = {
 
 export type ModelSubscriptionPodcastFilterInput = {
   and?: Array< ModelSubscriptionPodcastFilterInput | null > | null,
+  audioPath?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   genre?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
@@ -160,6 +166,7 @@ export type GetPodcastQueryVariables = {
 export type GetPodcastQuery = {
   getPodcast?:  {
     __typename: "Podcast",
+    audioPath: string,
     createdAt: string,
     genre: string,
     id: string,
@@ -180,6 +187,7 @@ export type ListPodcastsQuery = {
     __typename: "ModelPodcastConnection",
     items:  Array< {
       __typename: "Podcast",
+      audioPath: string,
       createdAt: string,
       genre: string,
       id: string,
@@ -199,6 +207,7 @@ export type CreatePodcastMutationVariables = {
 export type CreatePodcastMutation = {
   createPodcast?:  {
     __typename: "Podcast",
+    audioPath: string,
     createdAt: string,
     genre: string,
     id: string,
@@ -216,6 +225,7 @@ export type DeletePodcastMutationVariables = {
 export type DeletePodcastMutation = {
   deletePodcast?:  {
     __typename: "Podcast",
+    audioPath: string,
     createdAt: string,
     genre: string,
     id: string,
@@ -233,6 +243,7 @@ export type UpdatePodcastMutationVariables = {
 export type UpdatePodcastMutation = {
   updatePodcast?:  {
     __typename: "Podcast",
+    audioPath: string,
     createdAt: string,
     genre: string,
     id: string,
@@ -250,6 +261,7 @@ export type OnCreatePodcastSubscriptionVariables = {
 export type OnCreatePodcastSubscription = {
   onCreatePodcast?:  {
     __typename: "Podcast",
+    audioPath: string,
     createdAt: string,
     genre: string,
     id: string,
@@ -267,6 +279,7 @@ export type OnDeletePodcastSubscriptionVariables = {
 export type OnDeletePodcastSubscription = {
   onDeletePodcast?:  {
     __typename: "Podcast",
+    audioPath: string,
     createdAt: string,
     genre: string,
     id: string,
@@ -284,6 +297,7 @@ export type OnUpdatePodcastSubscriptionVariables = {
 export type OnUpdatePodcastSubscription = {
   onUpdatePodcast?:  {
     __typename: "Podcast",
+    audioPath: string,
     createdAt: string,
     genre: string,
     id: string,

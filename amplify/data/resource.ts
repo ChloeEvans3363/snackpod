@@ -5,6 +5,7 @@ const schema = a.schema({
     .model({
       name: a.string().required(),
       genre: a.string().required(),
+      audioPath: a.string().required(),
     })
     .authorization((allow) => [
       allow.guest().to(['read']),
