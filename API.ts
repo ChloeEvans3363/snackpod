@@ -5,11 +5,11 @@
 export type Podcast = {
   __typename: "Podcast",
   audioPath: string,
-  createdAt: string,
+  createdAt?: string | null,
   genre: string,
   id: string,
   name: string,
-  owner?: string | null,
+  owner: string,
   updatedAt: string,
 };
 
@@ -42,17 +42,18 @@ export type ModelStringInput = {
   size?: ModelSizeInput | null,
 };
 
-export type ModelAttributeTypes =
-  | "_null"
-  | "binary"
-  | "binarySet"
-  | "bool"
-  | "list"
-  | "map"
-  | "number"
-  | "numberSet"
-  | "string"
-  | "stringSet";
+export enum ModelAttributeTypes {
+  _null = "_null",
+  binary = "binary",
+  binarySet = "binarySet",
+  bool = "bool",
+  list = "list",
+  map = "map",
+  number = "number",
+  numberSet = "numberSet",
+  string = "string",
+  stringSet = "stringSet",
+}
 
 
 export type ModelSizeInput = {
@@ -101,9 +102,11 @@ export type ModelPodcastConditionInput = {
 
 export type CreatePodcastInput = {
   audioPath: string,
+  createdAt?: string | null,
   genre: string,
   id?: string | null,
   name: string,
+  owner: string,
 };
 
 export type DeletePodcastInput = {
@@ -112,9 +115,11 @@ export type DeletePodcastInput = {
 
 export type UpdatePodcastInput = {
   audioPath?: string | null,
+  createdAt?: string | null,
   genre?: string | null,
   id: string,
   name?: string | null,
+  owner?: string | null,
 };
 
 export type ModelSubscriptionPodcastFilterInput = {
@@ -167,11 +172,11 @@ export type GetPodcastQuery = {
   getPodcast?:  {
     __typename: "Podcast",
     audioPath: string,
-    createdAt: string,
+    createdAt?: string | null,
     genre: string,
     id: string,
     name: string,
-    owner?: string | null,
+    owner: string,
     updatedAt: string,
   } | null,
 };
@@ -188,11 +193,11 @@ export type ListPodcastsQuery = {
     items:  Array< {
       __typename: "Podcast",
       audioPath: string,
-      createdAt: string,
+      createdAt?: string | null,
       genre: string,
       id: string,
       name: string,
-      owner?: string | null,
+      owner: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -208,11 +213,11 @@ export type CreatePodcastMutation = {
   createPodcast?:  {
     __typename: "Podcast",
     audioPath: string,
-    createdAt: string,
+    createdAt?: string | null,
     genre: string,
     id: string,
     name: string,
-    owner?: string | null,
+    owner: string,
     updatedAt: string,
   } | null,
 };
@@ -226,11 +231,11 @@ export type DeletePodcastMutation = {
   deletePodcast?:  {
     __typename: "Podcast",
     audioPath: string,
-    createdAt: string,
+    createdAt?: string | null,
     genre: string,
     id: string,
     name: string,
-    owner?: string | null,
+    owner: string,
     updatedAt: string,
   } | null,
 };
@@ -244,11 +249,11 @@ export type UpdatePodcastMutation = {
   updatePodcast?:  {
     __typename: "Podcast",
     audioPath: string,
-    createdAt: string,
+    createdAt?: string | null,
     genre: string,
     id: string,
     name: string,
-    owner?: string | null,
+    owner: string,
     updatedAt: string,
   } | null,
 };
@@ -262,11 +267,11 @@ export type OnCreatePodcastSubscription = {
   onCreatePodcast?:  {
     __typename: "Podcast",
     audioPath: string,
-    createdAt: string,
+    createdAt?: string | null,
     genre: string,
     id: string,
     name: string,
-    owner?: string | null,
+    owner: string,
     updatedAt: string,
   } | null,
 };
@@ -280,11 +285,11 @@ export type OnDeletePodcastSubscription = {
   onDeletePodcast?:  {
     __typename: "Podcast",
     audioPath: string,
-    createdAt: string,
+    createdAt?: string | null,
     genre: string,
     id: string,
     name: string,
-    owner?: string | null,
+    owner: string,
     updatedAt: string,
   } | null,
 };
@@ -298,11 +303,11 @@ export type OnUpdatePodcastSubscription = {
   onUpdatePodcast?:  {
     __typename: "Podcast",
     audioPath: string,
-    createdAt: string,
+    createdAt?: string | null,
     genre: string,
     id: string,
     name: string,
-    owner?: string | null,
+    owner: string,
     updatedAt: string,
   } | null,
 };

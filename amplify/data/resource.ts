@@ -4,6 +4,7 @@ const schema = a.schema({
   Podcast: a
     .model({
       name: a.string().required(),
+      owner: a.string().required(),
       genre: a.string().required(),
       audioPath: a.string().required(),
     })

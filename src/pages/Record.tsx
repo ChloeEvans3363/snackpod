@@ -8,6 +8,7 @@ import { useRef, useState } from "react";
 import { uploadData } from "aws-amplify/storage";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/api";
+import { getCurrentUser } from "@aws-amplify/auth";
 
 // Generating the client
 const client = generateClient<Schema>({
@@ -153,8 +154,12 @@ export function Record() {
       }).result;
       console.log(podData.title + " " + podData.genre + " " + result.path);
 
+      const user = await getCurrentUser();
+      const username = user.username; // or user.userId or user.signInDetails?.loginId
+
       const response = await client.models.Podcast.create({
         name: podData.title,
+        owner: username,
         genre: podData.genre,
         audioPath: result.path,
       });

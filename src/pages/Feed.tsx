@@ -13,6 +13,7 @@ const client = generateClient();
 // Update to match createPodcast mutation input
 export async function createPostItem(
   name: string,
+  owner: string,
   genre: string,
   audioPath: string,
 ) {
@@ -21,6 +22,7 @@ export async function createPostItem(
     variables: {
       input: {
         name,
+        owner,
         genre,
         audioPath,
       },
@@ -42,7 +44,9 @@ export async function fetchFeed() {
 function Feed() {
   const { signOut } = useAuthenticator();
   const [podcastNames, setPodcastNames] = useState<string[]>([]);
+  const [podcastGenres, setPodcastGrenres] = useState<string[]>([]);
   const [audioUrls, setAudioUrls] = useState<string[]>([]);
+  const [usernames, setUsernames] = useState<string[]>([]);
 
   // Fetch all podcasts using GraphQL
   const fetchFeed = async () => {
@@ -51,6 +55,8 @@ function Feed() {
       // Adjust the path below based on your actual query response structure
       const items = result.data?.listPodcasts?.items || [];
       setPodcastNames(items.map((item: any) => item.name));
+      setPodcastGrenres(items.map((item: any) => item.genre));
+      setUsernames(items.map((item: any) => item.owner));
       const urls = await Promise.all(
         items.map((item) => getUrl({ path: item.audioPath })),
       );
@@ -59,6 +65,8 @@ function Feed() {
       console.log("Error fetching feed:", error);
       setPodcastNames([]);
       setAudioUrls([]);
+      setPodcastGrenres([]);
+      setUsernames([]);
     }
   };
 
@@ -80,7 +88,7 @@ function Feed() {
           <ul>
             {podcastNames.map((name, index) => (
               <li key={name}>
-                {name}
+                {name} {podcastGenres[index]} {usernames[index]}
                 <audio src={audioUrls[index]} controls></audio>
               </li>
             ))}
