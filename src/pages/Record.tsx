@@ -8,7 +8,7 @@ import { useRef, useState } from "react";
 import { uploadData } from "aws-amplify/storage";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/api";
-import { getCurrentUser } from "@aws-amplify/auth";
+import { getCurrentUser, fetchUserAttributes } from "@aws-amplify/auth";
 
 // Generating the client
 const client = generateClient<Schema>({
@@ -154,12 +154,29 @@ export function Record() {
       }).result;
       console.log(podData.title + " " + podData.genre + " " + result.path);
 
+      // Get the current user's preferred username
       const user = await getCurrentUser();
-      const username = user.username; // or user.userId or user.signInDetails?.loginId
+      // Fetch preferred_username from user attributes if available
+      let username = undefined;
+      try {
+        const attributes = await fetchUserAttributes();
+        if (attributes && attributes.preferred_username) {
+          username = attributes.preferred_username;
+        }
+      } catch (e) {
+        // fallback if fetchUserAttributes fails
+        if (user && user.signInDetails && user.signInDetails.loginId) {
+          username = user.signInDetails.loginId;
+        } else if (user && user.username) {
+          username = user.username;
+        } else if (user && user.userId) {
+          username = user.userId;
+        }
+      }
 
       const response = await client.models.Podcast.create({
         name: podData.title,
-        owner: username,
+        owner: username || "unknown",
         genre: podData.genre,
         audioPath: result.path,
       });
