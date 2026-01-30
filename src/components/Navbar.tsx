@@ -21,7 +21,9 @@ export function Navbar() {
           <Link to="/Saved" style={{ textDecoration: "none" }}>
             <p>Saved</p>
           </Link>
-          <p>Profile</p>
+          <Link to="/Profile" style={{ textDecoration: "none" }}>
+            <p>Profile</p>
+          </Link>
         </div>
       </div>
     </div>

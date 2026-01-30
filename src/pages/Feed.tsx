@@ -7,6 +7,7 @@ import { generateClient } from "aws-amplify/api";
 import { createPodcast } from "../../mutations";
 import { listPodcasts } from "../../queries";
 import { getUrl } from "aws-amplify/storage";
+import Podcast from "../components/Podcast";
 
 const client = generateClient();
 
@@ -81,15 +82,18 @@ function Feed() {
       </div>
       <button onClick={signOut}>Sign out</button>
       <div className="uploads-list">
-        <h2>Uploaded Podcasts</h2>
         {podcastNames.length === 0 ? (
           <p>No uploads found.</p>
         ) : (
           <ul>
             {podcastNames.map((name, index) => (
               <li key={name}>
-                {name} {podcastGenres[index]} {usernames[index]}
-                <audio src={audioUrls[index]} controls></audio>
+                <Podcast
+                  podcastName={name}
+                  podcastGenre={podcastGenres[index]}
+                  username={usernames[index]}
+                  podcastAudioPath={audioUrls[index]}
+                ></Podcast>
               </li>
             ))}
           </ul>

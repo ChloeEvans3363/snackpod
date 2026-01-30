@@ -1,0 +1,13 @@
+/* Stack all podcast info vertically */
+.podcast {
+	display: flex;
+	flex-direction: column;
+    text-align: left;
+	gap: 0.5rem;
+	margin-bottom: 1.5rem;
+	background: #fce38a;
+	border-radius: 16px;
+	padding: 1.5rem;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+	border: 2px solid #f9d976;
+}

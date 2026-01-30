@@ -17,8 +17,23 @@
 }
 
 .logoContainer {
-    position: fixed;
-    top: 10px;
-    left: 10px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}
+
+.uploads-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.uploads-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  text-align: center;
 }
 
