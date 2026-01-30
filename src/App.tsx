@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login></Login>} />
-        <Route path="/feed" element={<Feed></Feed>} />
+        <Route path="/" element={<Feed></Feed>} />
         <Route path="/record" element={<Record></Record>} />
         <Route path="/saved" element={<Saved></Saved>} />
       </Routes>

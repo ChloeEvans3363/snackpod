@@ -15,7 +15,7 @@ export function Navbar() {
           </Button>
         </Link>
         <div className="pages">
-          <Link to="/Feed" style={{ textDecoration: "none" }}>
+          <Link to="/" style={{ textDecoration: "none" }}>
             <p>Feed</p>
           </Link>
           <Link to="/Saved" style={{ textDecoration: "none" }}>
